@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import classNames from 'classnames'
-import {createCSSTransform, createSVGTransform} from './utils/domFns'
+import {createCSSTransform, createSVGTransform} from './utils/dom'
 import {canDragX, canDragY, createDraggableData, createDraggableDataOnDrop, getBoundPosition} from './utils/position'
 import DraggableCore from './DraggableCore'
 
@@ -254,8 +254,8 @@ export default class Draggable extends React.Component {
 
         const uiData = createDraggableData(this, coreData)
         const newState = {
-            x: uiData.x + this.state.slackX,
-            y: uiData.y + this.state.slackY
+            x: uiData.x,
+            y: uiData.y
         }
 
         // Keep within bounds.

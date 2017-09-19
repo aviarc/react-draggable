@@ -576,7 +576,7 @@ var _reactDom = __webpack_require__(3);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _domFns = __webpack_require__(4);
+var _dom = __webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -611,8 +611,8 @@ function getBoundPosition(draggable, x, y) {
         bounds = {
             left: -node.offsetLeft + (0, _shims.int)(boundNodeStyle.paddingLeft) + (0, _shims.int)(nodeStyle.marginLeft),
             top: -node.offsetTop + (0, _shims.int)(boundNodeStyle.paddingTop) + (0, _shims.int)(nodeStyle.marginTop),
-            right: (0, _domFns.innerWidth)(boundNode) - (0, _domFns.outerWidth)(node) - node.offsetLeft + (0, _shims.int)(boundNodeStyle.paddingRight) - (0, _shims.int)(nodeStyle.marginRight),
-            bottom: (0, _domFns.innerHeight)(boundNode) - (0, _domFns.outerHeight)(node) - node.offsetTop + (0, _shims.int)(boundNodeStyle.paddingBottom) - (0, _shims.int)(nodeStyle.marginBottom)
+            right: (0, _dom.innerWidth)(boundNode) - (0, _dom.outerWidth)(node) - node.offsetLeft + (0, _shims.int)(boundNodeStyle.paddingRight) - (0, _shims.int)(nodeStyle.marginRight),
+            bottom: (0, _dom.innerHeight)(boundNode) - (0, _dom.outerHeight)(node) - node.offsetTop + (0, _shims.int)(boundNodeStyle.paddingBottom) - (0, _shims.int)(nodeStyle.marginBottom)
         };
     }
 
@@ -652,14 +652,14 @@ function canDragY(draggable) {
 // Get {x, y} positions from event.
 // Get {x, y} positions from event.
 function getControlPosition(e, touchIdentifier, draggableCore) {
-    var touchObj = typeof touchIdentifier === 'number' ? (0, _domFns.getTouch)(e, touchIdentifier) : null;
+    var touchObj = typeof touchIdentifier === 'number' ? (0, _dom.getTouch)(e, touchIdentifier) : null;
     if (typeof touchIdentifier === 'number' && !touchObj) {
         return null;
     } // not the right touch
     var node = _reactDom2.default.findDOMNode(draggableCore);
     // User can provide an offsetParent if desired.
     var offsetParent = draggableCore.props.offsetParent || node.offsetParent || node.ownerDocument.body;
-    return (0, _domFns.offsetXYFromParent)(touchObj || e, offsetParent);
+    return (0, _dom.offsetXYFromParent)(touchObj || e, offsetParent);
 }
 
 // Create an data object exposed by <DraggableCore>'s events
@@ -819,7 +819,7 @@ var _reactDom = __webpack_require__(3);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _domFns = __webpack_require__(4);
+var _dom = __webpack_require__(4);
 
 var _position = __webpack_require__(9);
 
@@ -888,14 +888,14 @@ var DraggableCore = function (_React$Component) {
 
             // Short circuit if handle or cancel prop was provided and selector doesn't match.
 
-            if (_this.props.disabled || !(e.target instanceof ownerDocument.defaultView.Node) || _this.props.handle && !(0, _domFns.matchesSelectorAndParentsTo)(e.target, _this.props.handle, domNode) || _this.props.cancel && (0, _domFns.matchesSelectorAndParentsTo)(e.target, _this.props.cancel, domNode)) {
+            if (_this.props.disabled || !(e.target instanceof ownerDocument.defaultView.Node) || _this.props.handle && !(0, _dom.matchesSelectorAndParentsTo)(e.target, _this.props.handle, domNode) || _this.props.cancel && (0, _dom.matchesSelectorAndParentsTo)(e.target, _this.props.cancel, domNode)) {
                 return;
             }
 
             // Set touch identifier in component state if this is a touch event. This allows us to
             // distinguish between individual touches on multitouch screens by identifying which
             // touchpoint was set to this element.
-            var touchIdentifier = (0, _domFns.getTouchIdentifier)(e);
+            var touchIdentifier = (0, _dom.getTouchIdentifier)(e);
             _this.setState({ touchIdentifier: touchIdentifier });
 
             // Get the current drag point from the event. This is used as the offset.
@@ -916,7 +916,7 @@ var DraggableCore = function (_React$Component) {
             // Add a style to the body to disable user-select. This prevents text from
             // being selected all over the page.
             if (_this.props.enableUserSelectHack) {
-                (0, _domFns.addUserSelectStyles)(ownerDocument.body);
+                (0, _dom.addUserSelectStyles)(ownerDocument.body);
             }
 
             // Initiate dragging. Set the current x and y as offsets
@@ -932,8 +932,8 @@ var DraggableCore = function (_React$Component) {
             // Add events to the document directly so we catch when the user's mouse/touch moves outside of
             // this element. We use different events depending on whether or not we have detected that this
             // is a touch-capable device.
-            (0, _domFns.addEvent)(ownerDocument, dragEventFor.move, _this.handleDrag);
-            (0, _domFns.addEvent)(ownerDocument, dragEventFor.stop, _this.handleDragStop);
+            (0, _dom.addEvent)(ownerDocument, dragEventFor.move, _this.handleDrag);
+            (0, _dom.addEvent)(ownerDocument, dragEventFor.stop, _this.handleDragStop);
         }, _this.handleDrag = function (e) {
 
             // Prevent scrolling on mobile devices, like ipad/iphone.
@@ -1010,7 +1010,7 @@ var DraggableCore = function (_React$Component) {
 
 
             if (_this.props.enableUserSelectHack) {
-                (0, _domFns.removeUserSelectStyles)(ownerDocument.body);
+                (0, _dom.removeUserSelectStyles)(ownerDocument.body);
             }
 
             // Reset the el.
@@ -1024,8 +1024,8 @@ var DraggableCore = function (_React$Component) {
             _this.props.onStop(e, coreEvent);
 
             // Remove event handlers
-            (0, _domFns.removeEvent)(ownerDocument, dragEventFor.move, _this.handleDrag);
-            (0, _domFns.removeEvent)(ownerDocument, dragEventFor.stop, _this.handleDragStop);
+            (0, _dom.removeEvent)(ownerDocument, dragEventFor.move, _this.handleDrag);
+            (0, _dom.removeEvent)(ownerDocument, dragEventFor.stop, _this.handleDragStop);
         }, _this.onMouseDown = function (e) {
             dragEventFor = eventsFor.mouse; // on touchscreen laptops we could switch back to mouse
 
@@ -1055,12 +1055,12 @@ var DraggableCore = function (_React$Component) {
             var _ReactDOM$findDOMNode2 = _reactDom2.default.findDOMNode(this),
                 ownerDocument = _ReactDOM$findDOMNode2.ownerDocument;
 
-            (0, _domFns.removeEvent)(ownerDocument, eventsFor.mouse.move, this.handleDrag);
-            (0, _domFns.removeEvent)(ownerDocument, eventsFor.touch.move, this.handleDrag);
-            (0, _domFns.removeEvent)(ownerDocument, eventsFor.mouse.stop, this.handleDragStop);
-            (0, _domFns.removeEvent)(ownerDocument, eventsFor.touch.stop, this.handleDragStop);
+            (0, _dom.removeEvent)(ownerDocument, eventsFor.mouse.move, this.handleDrag);
+            (0, _dom.removeEvent)(ownerDocument, eventsFor.touch.move, this.handleDrag);
+            (0, _dom.removeEvent)(ownerDocument, eventsFor.mouse.stop, this.handleDragStop);
+            (0, _dom.removeEvent)(ownerDocument, eventsFor.touch.stop, this.handleDragStop);
             if (this.props.enableUserSelectHack) {
-                (0, _domFns.removeUserSelectStyles)(ownerDocument.body);
+                (0, _dom.removeUserSelectStyles)(ownerDocument.body);
             }
         }
     }, {
@@ -1071,7 +1071,7 @@ var DraggableCore = function (_React$Component) {
             // eslint-disable-next-line react/prop-types
             return _react2.default.cloneElement(_react2.default.Children.only(this.props.children), {
                 // eslint-disable-next-line react/prop-types
-                style: (0, _domFns.styleHacks)(this.props.children.props.style),
+                style: (0, _dom.styleHacks)(this.props.children.props.style),
 
                 // Note: mouseMove handler is attached to document so it will still function
                 // when the user drags quickly and leaves the bounds of the element.
@@ -1253,7 +1253,7 @@ var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _domFns = __webpack_require__(4);
+var _dom = __webpack_require__(4);
 
 var _position = __webpack_require__(9);
 
@@ -1269,7 +1269,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable*/
+
 
 var Draggable = function (_React$Component) {
     _inherits(Draggable, _React$Component);
@@ -1318,8 +1319,8 @@ var Draggable = function (_React$Component) {
 
             var uiData = (0, _position.createDraggableData)(_this, coreData);
             var newState = {
-                x: uiData.x + _this.state.slackX,
-                y: uiData.y + _this.state.slackY
+                x: uiData.x,
+                y: uiData.y
 
                 // Keep within bounds.
             };if (_this.props.bounds) {
@@ -1441,13 +1442,13 @@ var Draggable = function (_React$Component) {
 
                 // If this element was SVG, we use the `transform` attribute.
             };if (this.state.isElementSVG) {
-                svgTransform = (0, _domFns.createSVGTransform)(transformOpts);
+                svgTransform = (0, _dom.createSVGTransform)(transformOpts);
             } else {
                 // Add a CSS transform to move the element around. This allows us to move the element around
                 // without worrying about whether or not it is relatively or absolutely positioned.
                 // If the item you are dragging already has a transform set, wrap it in a <span> so <Draggable>
                 // has a clean slate.
-                style = (0, _domFns.createCSSTransform)(transformOpts);
+                style = (0, _dom.createCSSTransform)(transformOpts);
             }
 
             var _props = this.props,

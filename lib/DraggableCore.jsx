@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import {
     matchesSelectorAndParentsTo, addEvent, removeEvent, addUserSelectStyles, getTouchIdentifier,
     removeUserSelectStyles, styleHacks
-} from './utils/domFns'
+} from './utils/dom'
 import {createCoreData, getControlPosition, snapToGrid} from './utils/position'
 
 // Simple abstraction for dragging events names.
