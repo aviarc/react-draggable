@@ -990,6 +990,8 @@ var DraggableCore = function (_React$Component) {
                 lastY: y
             });
         }, _this.handleDragStop = function (e) {
+            _this.props.onMouseUp(e);
+
             if (!_this.state.dragging) {
                 return;
             }
@@ -1032,7 +1034,6 @@ var DraggableCore = function (_React$Component) {
             return _this.handleDragStart(e);
         }, _this.onMouseUp = function (e) {
             dragEventFor = eventsFor.mouse;
-
             return _this.handleDragStop(e);
         }, _this.onTouchStart = function (e) {
             // We're on a touch device now, so change the event handlers
@@ -1193,7 +1194,8 @@ DraggableCore.propTypes = {
      * A workaround option which can be passed if onMouseDown needs to be accessed,
      * since it'll always be blocked (as there is internal use of onMouseDown)
      */
-    onMouseDown: _propTypes2.default.func
+    onMouseDown: _propTypes2.default.func,
+    onMouseUp: _propTypes2.default.func
 };
 DraggableCore.defaultProps = {
     allowAnyClick: false, // by default only accept left click
@@ -1207,7 +1209,8 @@ DraggableCore.defaultProps = {
     onStart: function onStart() {},
     onDrag: function onDrag() {},
     onStop: function onStop() {},
-    onMouseDown: function onMouseDown() {}
+    onMouseDown: function onMouseDown() {},
+    onMouseUp: function onMouseUp() {}
 };
 exports.default = DraggableCore;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)))
@@ -1297,11 +1300,13 @@ var Draggable = function (_React$Component) {
             slackX: 0,
             slackY: 0,
             // Can only determine if SVG after mounting
-            isElementSVG: false
+            isElementSVG: false,
+            childStyle: { zIndex: 'none', overflow: 'none' },
+            parentStyle: { zIndex: 'none', overflow: 'none' }
         }, _this.onDragStart = function (event, coreData) {
             _this.saveMouseOffset(event);
-            coreData.node.parentElement.style.zIndex = 10000;
-            coreData.node.parentElement.style.overflow = 'visible';
+            _this.putElementOnTop(coreData.node, 'childStyle');
+            _this.putElementOnTop(coreData.node.parentElement, 'parentStyle');
 
             // Short-circuit if user's callback killed it.
             var shouldStart = _this.props.onStart(event, (0, _position.createDraggableData)(_this, coreData));
@@ -1360,8 +1365,8 @@ var Draggable = function (_React$Component) {
                 return false;
             }
 
-            coreData.node.parentElement.style.zIndex = 'auto';
-            coreData.node.parentElement.style.overflow = 'auto';
+            _this.putElementBack(coreData.node, 'childStyle');
+            _this.putElementBack(coreData.node.parentElement, 'parentStyle');
 
             // Short-circuit if user's callback killed it.
             var shouldStop = _this.props.onStop(event, (0, _position.createDraggableDataOnDrop)(_this, coreData, event, _this.state.offset));
@@ -1479,6 +1484,19 @@ var Draggable = function (_React$Component) {
         value: function saveMouseOffset(event) {
             var rect = event.target.getBoundingClientRect();
             this.setState({ offset: { offsetX: event.pageX - rect.left, offsetY: event.pageY - rect.top } });
+        }
+    }, {
+        key: 'putElementOnTop',
+        value: function putElementOnTop(element, styleId) {
+            this.setState(_defineProperty({}, styleId, { zIndex: element.style.zIndex, overflow: element.style.overflow }));
+            element.style.zIndex = 10000;
+            element.style.overflow = 'visible';
+        }
+    }, {
+        key: 'putElementBack',
+        value: function putElementBack(element, styleId) {
+            element.style.zIndex = this.state[styleId].zIndex;
+            element.style.overflow = this.state[styleId].overflow;
         }
     }]);
 

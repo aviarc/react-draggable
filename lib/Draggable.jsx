@@ -138,7 +138,9 @@ export default class Draggable extends React.Component {
         slackX: 0,
         slackY: 0,
         // Can only determine if SVG after mounting
-        isElementSVG: false
+        isElementSVG: false,
+        childStyle: {zIndex: 'none', overflow: 'none'},
+        parentStyle: {zIndex: 'none', overflow: 'none'}
     }
 
     componentWillMount() {
@@ -223,6 +225,7 @@ export default class Draggable extends React.Component {
                            onStart={this.onDragStart}
                            onDrag={this.onDrag}
                            onStop={this.onDragStop}>
+
                 {React.cloneElement(React.Children.only(this.props.children), {
                     className: className,
                     style: {...this.props.children.props.style, ...style},
@@ -234,8 +237,8 @@ export default class Draggable extends React.Component {
 
     onDragStart = (event, coreData) => {
         this.saveMouseOffset(event)
-        coreData.node.parentElement.style.zIndex = 10000
-        coreData.node.parentElement.style.overflow = 'visible'
+        this.putElementOnTop(coreData.node, 'childStyle')
+        this.putElementOnTop(coreData.node.parentElement, 'parentStyle')
 
         // Short-circuit if user's callback killed it.
         const shouldStart = this.props.onStart(event, createDraggableData(this, coreData))
@@ -296,8 +299,8 @@ export default class Draggable extends React.Component {
             return false
         }
 
-        coreData.node.parentElement.style.zIndex = 'auto'
-        coreData.node.parentElement.style.overflow = 'auto'
+        this.putElementBack(coreData.node, 'childStyle')
+        this.putElementBack(coreData.node.parentElement, 'parentStyle')
 
         // Short-circuit if user's callback killed it.
         const shouldStop = this.props.onStop(event, createDraggableDataOnDrop(this, coreData, event, this.state.offset))
@@ -326,6 +329,17 @@ export default class Draggable extends React.Component {
     saveMouseOffset(event) {
         const rect = event.target.getBoundingClientRect()
         this.setState({offset: {offsetX: event.pageX - rect.left, offsetY: event.pageY - rect.top}})
+    }
+
+    putElementOnTop(element, styleId) {
+        this.setState({[styleId]: {zIndex: element.style.zIndex, overflow: element.style.overflow}})
+        element.style.zIndex = 10000
+        element.style.overflow = 'visible'
+    }
+
+    putElementBack(element, styleId) {
+        element.style.zIndex = this.state[styleId].zIndex
+        element.style.overflow = this.state[styleId].overflow
     }
 
 }
