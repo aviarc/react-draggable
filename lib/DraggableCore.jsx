@@ -137,7 +137,8 @@ export default class DraggableCore extends React.Component {
          * A workaround option which can be passed if onMouseDown needs to be accessed,
          * since it'll always be blocked (as there is internal use of onMouseDown)
          */
-        onMouseDown: PropTypes.func
+        onMouseDown: PropTypes.func,
+        onMouseUp: PropTypes.func
     }
 
     static defaultProps = {
@@ -156,6 +157,8 @@ export default class DraggableCore extends React.Component {
         onStop: function () {
         },
         onMouseDown: function () {
+        },
+        onMouseUp: function () {
         }
     }
 
@@ -310,6 +313,8 @@ export default class DraggableCore extends React.Component {
     }
 
     handleDragStop = (e) => {
+        this.props.onMouseUp(e)
+
         if (!this.state.dragging) {
             return
         }
@@ -344,13 +349,11 @@ export default class DraggableCore extends React.Component {
 
     onMouseDown = (e) => {
         dragEventFor = eventsFor.mouse // on touchscreen laptops we could switch back to mouse
-
         return this.handleDragStart(e)
     }
 
     onMouseUp = (e) => {
         dragEventFor = eventsFor.mouse
-
         return this.handleDragStop(e)
     }
 
