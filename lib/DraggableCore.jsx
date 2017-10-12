@@ -349,7 +349,6 @@ export default class DraggableCore extends React.Component {
 
     onMouseDown = (e) => {
         dragEventFor = eventsFor.mouse // on touchscreen laptops we could switch back to mouse
-
         return this.handleDragStart(e)
     }
 
