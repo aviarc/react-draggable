@@ -334,7 +334,9 @@ export default class Draggable extends React.Component {
     putElementOnTop(element, styleId) {
         this.setState({[styleId]: {zIndex: element.style.zIndex, overflow: element.style.overflow}})
         element.style.zIndex = 10000
-        element.style.overflow = 'visible'
+        if (styleId === 'parentStyle') {
+            element.style.overflow = 'visible'
+        }
     }
 
     putElementBack(element, styleId) {
