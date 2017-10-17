@@ -1489,7 +1489,9 @@ var Draggable = function (_React$Component) {
         value: function putElementOnTop(element, styleId) {
             this.setState(_defineProperty({}, styleId, { zIndex: element.style.zIndex, overflow: element.style.overflow }));
             element.style.zIndex = 10000;
-            element.style.overflow = 'visible';
+            if (styleId === 'parentStyle') {
+                element.style.overflow = 'visible';
+            }
         }
     }, {
         key: 'putElementBack',
